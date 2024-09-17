@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Super Converter</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        color: #333;
+      }
+      #root {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        width: 100%;
+        backdrop-filter: blur(10px);
+      }
+      h1 {
+        color: #4a4a4a;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        font-size: 2.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      select,
+      input {
+        width: 100%;
+        padding: 0.8rem;
+        margin-bottom: 1rem;
+        border: none;
+        border-radius: 10px;
+        box-sizing: border-box;
+        background-color: #f0f0f0;
+        transition: all 0.3s ease;
+      }
+      select:focus,
+      input:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px #764ba2;
+      }
+      select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1em;
+      }
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #4a4a4a;
+        font-weight: 600;
+      }
+      button {
+        width: 48%;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      button:first-of-type {
+        background-color: #667eea;
+        color: white;
+        margin-right: 4%;
+      }
+      button:last-of-type {
+        background-color: #764ba2;
+        color: white;
+      }
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+      hr {
+        border: none;
+        border-top: 2px solid #e0e0e0;
+        margin: 1.5rem 0;
+      }
+      .converter-container > div {
+        margin-bottom: 1rem;
+        position: relative;
+      }
+      .converter-container > div::after {
+        content: attr(data-unit);
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #888;
+        pointer-events: none;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .converter-container {
+        animation: fadeIn 0.5s ease-out;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function MinutesToHours() {
+      const [amount, setAmount] = React.useState(0);
+      const [inverted, setInverted] = React.useState(false);
+      const onChange = (event) => {
+        setAmount(event.target.value);
+      };
+      const reset = () => setAmount(0);
+      const onFlip = () => {
+        reset();
+        setInverted((current) => !current);
+      };
+      return (
+        <div className="converter-container">
+          <div data-unit={inverted ? "hours" : "minutes"}>
+            <label htmlFor="input">{inverted ? "Hours" : "Minutes"}</label>
+            <input
+              value={amount}
+              id="input"
+              placeholder={inverted ? "Hours" : "Minutes"}
+              type="number"
+              onChange={onChange}
+            />
+          </div>
+          <div data-unit={inverted ? "minutes" : "hours"}>
+            <label htmlFor="output">{inverted ? "Minutes" : "Hours"}</label>
+            <input
+              value={inverted ? amount * 60 : Math.round(amount / 60)}
+              id="output"
+              placeholder={inverted ? "Minutes" : "Hours"}
+              type="number"
+              disabled
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onFlip}>{inverted ? "Turn back" : "Invert"}</button>
+        </div>
+      );
+    }
+    function KmToMiles() {
+      const [amount, setAmount] = React.useState(0);
+      const [inverted, setInverted] = React.useState(false);
+      const onChange = (event) => {
+        setAmount(event.target.value);
+      };
+      const reset = () => setAmount(0);
+      const onFlip = () => {
+        reset();
+        setInverted((current) => !current);
+      };
+      return (
+        <div className="converter-container">
+          <div data-unit={inverted ? "miles" : "km"}>
+            <label htmlFor="input">{inverted ? "Miles" : "KM"}</label>
+            <input
+              value={amount}
+              id="input"
+              placeholder={inverted ? "Miles" : "Km"}
+              type="number"
+              onChange={onChange}
+            />
+          </div>
+          <div data-unit={inverted ? "km" : "miles"}>
+            <label htmlFor="output">{inverted ? "KM" : "Miles"}</label>
+            <input
+              value={inverted ? amount * 1.609 : (amount / 1.609).toFixed(3)}
+              id="output"
+              placeholder={inverted ? "KM" : "Miles"}
+              type="number"
+              disabled
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onFlip}>{inverted ? "Turn back" : "Invert"}</button>
+        </div>
+      );
+    }
+    function KgToLb() {
+      const [amount, setAmount] = React.useState(0);
+      const [inverted, setInverted] = React.useState(false);
+      const onChange = (event) => {
+        setAmount(event.target.value);
+      };
+      const reset = () => setAmount(0);
+      const onFlip = () => {
+        reset();
+        setInverted((current) => !current);
+      };
+      return (
+        <div className="converter-container">
+          <div data-unit={inverted ? "KG" : "LB"}>
+            <label htmlFor="input">{inverted ? "KG" : "LB"}</label>
+            <input
+              value={amount}
+              id="input"
+              placeholder={inverted ? "KG" : "LB"}
+              type="number"
+              onChange={onChange}
+            />
+          </div>
+          <div data-unit={inverted ? "LB" : "KG"}>
+            <label htmlFor="output">{inverted ? "LB" : "KG"}</label>
+            <input
+              value={inverted ? amount * 2.2046 : (amount / 2.2046).toFixed(3)}
+              id="output"
+              placeholder={inverted ? "LB" : "KG"}
+              type="number"
+              disabled
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onFlip}>{inverted ? "Turn back" : "Invert"}</button>
+        </div>
+      );
+    }
+
+    function App() {
+      const [index, setIndex] = React.useState("xx");
+      const onSelect = (event) => {
+        setIndex(event.target.value);
+      };
+      return (
+        <div>
+          <h1>Super Converter</h1>
+          <select value={index} onChange={onSelect}>
+            <option value="xx">Select your units</option>
+            <option value="0">Minutes & Hours</option>
+            <option value="1">Km & Miles</option>
+            <option value="2">Kg & Lb</option>
+          </select>
+          <hr />
+          {index === "xx" ? "Please select your units" : null}
+          {index === "0" ? <MinutesToHours /> : null}
+          {index === "1" ? <KmToMiles /> : null}
+          {index === "2" ? <KgToLb /> : null}
+        </div>
+      );
+    }
+    const root = document.getElementById("root");
+    ReactDOM.render(<App />, root);
+  </script>
+</html>
